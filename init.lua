@@ -182,7 +182,16 @@ require('lazy').setup({
     opts = {},
   },
 
-  -- "gc" to comment visual regions/lines
+  -- NORMAL mode
+  -- `gcc` - Toggles the current line using linewise comment
+  -- `gbc` - Toggles the current line using blockwise comment
+  -- `[count]gcc` - Toggles the number of line given as a prefix-count using linewise
+  -- `[count]gbc` - Toggles the number of line given as a prefix-count using blockwise
+  -- `gc[count]{motion}` - (Op-pending) Toggles the region using linewise comment
+  -- `gb[count]{motion}` - (Op-pending) Toggles the region using blockwise comment
+  -- VISUAL mode
+  -- `gc` - Toggles the region using linewise comment
+  -- `gb` - Toggles the region using blockwise comment
   { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
@@ -221,6 +230,10 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 
+  -- Github copilot
+  -- 'github/copilot.vim'
+  require 'user.copilot',
+
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
   --    up-to-date with whatever is in the kickstart repo.
@@ -230,56 +243,14 @@ require('lazy').setup({
   -- { import = 'custom.plugins' },
 }, {})
 
+-- plugins use Packer
+-- require 'user.nvim-tree'  -- haven't sit it up yet
+
 -- [[ Setting options ]]
--- See `:help vim.o`
--- NOTE: You can change these options as you wish!
-
--- Set highlight on search
-vim.o.hlsearch = false
-
--- Make line numbers default
-vim.wo.number = true
-
--- Enable mouse mode
-vim.o.mouse = 'a'
-
--- Sync clipboard between OS and Neovim.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.o.clipboard = 'unnamedplus'
-
--- Enable break indent
-vim.o.breakindent = true
-
--- Save undo history
-vim.o.undofile = true
-
--- Case-insensitive searching UNLESS \C or capital in search
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
--- Keep signcolumn on by default
-vim.wo.signcolumn = 'yes'
-
--- Decrease update time
-vim.o.updatetime = 250
-vim.o.timeoutlen = 300
-
--- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
-
--- NOTE: You should make sure your terminal supports this
-vim.o.termguicolors = true
+require 'user.options'
 
 -- [[ Basic Keymaps ]]
-
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
-
--- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+require 'user.keymaps'
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -430,8 +401,9 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
+  -- What's the difference between hover and signature help?
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -535,15 +507,15 @@ cmp.setup {
       behavior = cmp.ConfirmBehavior.Replace,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --   elseif luasnip.expand_or_locally_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_prev_item()
@@ -559,6 +531,6 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
