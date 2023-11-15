@@ -6,7 +6,9 @@
 -- NOTE: You can change these options as you wish!
 
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
+-- ignore case in search patterns
+vim.opt.ignorecase = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -20,9 +22,6 @@ vim.o.mouse = 'a'
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.o.clipboard = 'unnamedplus'
-
--- Enable break indent
-vim.o.breakindent = true
 
 -- Save undo history
 vim.o.undofile = true
@@ -58,16 +57,39 @@ augroup RestoreCursorPosition
 augroup END
 ]])
 
+-- [[ Highlight on yank ]]
+-- See `:help vim.highlight.on_yank()`
+local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.highlight.on_yank()
+
+  end,
+  group = highlight_group,
+  pattern = '*',
+})
+
+-- [[ Indentation & tabs ]]
+-- Enable break indent
+vim.o.breakindent = true
+-- -- always show tabs
+-- vim.opt.showtabline = 0 -- conflict with bufferline
+-- convert tabs to spaces
+vim.opt.expandtab = true
+-- insert 4 spaces for a tab
+vim.opt.tabstop = 4
+-- the number of spaces inserted for each indentation
+vim.opt.shiftwidth = 4
+-- make indenting smarter again
+vim.opt.smartindent = true
+
 -- vim.opt.cmdheight = 1                           -- more space in the neovim command line for displaying messages
 -- vim.opt.conceallevel = 0                        -- so that `` is visible in markdown files
 -- vim.opt.fileencoding = "utf-8"                  -- the encoding written to a file
--- vim.opt.hlsearch = true                         -- highlight all matches on previous search pattern
 -- vim.opt.ignorecase = true                       -- ignore case in search patterns
 -- vim.opt.pumheight = 10                          -- pop up menu height
 -- vim.opt.showmode = false                        -- we don't need to see things like -- INSERT -- anymore
--- vim.opt.showtabline = 0                         -- always show tabs
 -- vim.opt.smartcase = true                        -- smart case
--- vim.opt.smartindent = true                      -- make indenting smarter again
 -- vim.opt.splitbelow = true                       -- force all horizontal splits to go below current window
 -- vim.opt.splitright = true                       -- force all vertical splits to go to the right of current window
 -- vim.opt.swapfile = false                        -- creates a swapfile
@@ -76,9 +98,6 @@ augroup END
 -- vim.opt.undofile = true                         -- enable persistent undo
 -- vim.opt.updatetime = 300                        -- faster completion (4000ms default)
 -- vim.opt.writebackup = false                     -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
--- vim.opt.expandtab = true                        -- convert tabs to spaces
--- vim.opt.shiftwidth = 4                          -- the number of spaces inserted for each indentation
--- vim.opt.tabstop = 4                             -- insert 4 spaces for a tab
 -- vim.opt.cursorline = false                      -- highlight the current line
 -- vim.opt.laststatus = 3
 -- vim.opt.showcmd = false

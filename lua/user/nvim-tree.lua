@@ -1,5 +1,14 @@
-use {
-  "nvim-tree/nvim-tree.lua", 
+return {
+  "nvim-tree/nvim-tree.lua",
+  version = "*",
+  lazy = false,
+  dependencies = {
+    "nvim-tree/nvim-web-devicons"
+  },
+
+  config = function()
+    require("nvim-tree").setup {}
+  end
   -- config = function()
   --   local status_ok, nvim_tree = pcall(require, "nvim-tree")
   --   if not status_ok then
