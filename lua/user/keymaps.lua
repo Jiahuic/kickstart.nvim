@@ -39,7 +39,7 @@ keymap("n", "<leader>e", ":NvimTreeToggle<CR>", opts)
 keymap("n", "<S-l>", ":bnext<CR>", opts)
 keymap("n", "<S-h>", ":bprevious<CR>", opts)
 
--- Close buffers
+-- Close buffers -- vim-bbye required
 keymap("n", "<S-q>", "<cmd>Bdelete!<CR>", opts)
 
 -- Diagnostic keymaps
