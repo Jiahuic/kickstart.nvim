@@ -48,7 +48,7 @@ keymap('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic mess
 -- keymap('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 keymap('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
--- [[ Configure Telescope ]]
+-- [[ Telescope keymap ]]
 -- See `:help telescope.builtin`
 keymap('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 keymap('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
