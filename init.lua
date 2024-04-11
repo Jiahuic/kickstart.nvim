@@ -399,11 +399,6 @@ require('which-key').register {
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
 }
 
--- mason-lspconfig requires that these setup functions are called in this order
--- before setting up the servers.
-require('mason').setup()
-require('mason-lspconfig').setup()
-
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
 --
@@ -415,10 +410,26 @@ require('mason-lspconfig').setup()
 local servers = {
   -- clangd = {},
   -- gopls = {},
-  -- pyright = {},
   -- rust_analyzer = {},
   -- tsserver = {},
-  -- html = { filetypes = { 'html', 'twig', 'hbs'} },
+  pyright = {
+    -- Add Pyright-specific settings here
+    -- For example, to configure Python analysis options:
+    settings = {
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          diagnosticMode = "workspace",
+          useLibraryCodeForTypes = true,
+        },
+      },
+    },
+  },
+  html = {
+    -- Custom filetypes for the HTML server
+    filetypes = { 'html', 'twig', 'hbs' },
+    -- Add HTML-specific settings here (if any)
+  },
 
   lua_ls = {
     Lua = {
@@ -434,6 +445,13 @@ require('neodev').setup()
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+-- mason-lspconfig requires that these setup functions are called in this order
+-- before setting up the servers.
+require('mason').setup()
+require('mason-lspconfig').setup({
+  ensure_installed = { "pyright", "sumneko_lua" },  -- This line ensures pyright (for Python) and sumneko_lua (for Lua) are installed
+})
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
