@@ -83,6 +83,9 @@ vim.opt.shiftwidth = 4
 -- make indenting smarter again
 vim.opt.smartindent = true
 
+vim.opt.spelllang = "en_us"
+vim.opt.spell = true
+
 -- vim.opt.cmdheight = 1                           -- more space in the neovim command line for displaying messages
 -- vim.opt.conceallevel = 0                        -- so that `` is visible in markdown files
 -- vim.opt.fileencoding = "utf-8"                  -- the encoding written to a file
