@@ -83,6 +83,25 @@ vim.opt.shiftwidth = 4
 -- make indenting smarter again
 vim.opt.smartindent = true
 
+-- Use autocmd to change indentation for C files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"c", "cpp", "h", "hpp", "json"},
+  callback = function()
+    vim.opt.tabstop = 2
+    vim.opt.shiftwidth = 2
+  end,
+})
+
+-- LaTeX indentation settings
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = {"tex"},
+  callback = function()
+    vim.opt.tabstop = 4    -- Use 4 spaces per tab
+    vim.opt.shiftwidth = 4 -- Indent using 4 spaces
+    vim.opt.expandtab = true -- Ensure tabs are converted to spaces
+  end,
+})
+
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
 
